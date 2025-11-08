@@ -30,6 +30,24 @@ app = FastAPI(
     description="AI-powered employee onboarding system with LangChain & OpenAI",
     version="2.0.0"
 )
+
+
+# Favicon handler to stop crash from missing favicon requests
+@app.get("/favicon.ico")
+async def favicon():
+    # Return 204 No Content so browsers stop requesting a non-existent icon
+    from fastapi.responses import Response
+    return Response(status_code=204)
+
+
+# Health endpoint - lightweight JSON useful for readiness/liveness probes
+@app.get("/health")
+async def health():
+    return {
+        "status": "ok",
+        "service": "Employee Onboarding API",
+        "version": "2.0.0"
+    }
  
 # CORS middleware
 app.add_middleware(
